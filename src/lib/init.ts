@@ -12,6 +12,9 @@ cat <<EOF > .gitignore
 package-lock.json
 yarn.lock
 node_modules/
+*-linux
+*-macos
+*-win.exe
 
 EOF
 `;
@@ -89,6 +92,7 @@ cat << EOF
 Edit package.json as follows
 
     ...
+"bin": "./dist/YOUR_PACKAGE_NAME.js"
 "main": "./dist/lib/index.js",
 "types": "./src/lib/index.ts",
 "scripts": {
