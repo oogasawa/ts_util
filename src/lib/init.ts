@@ -92,6 +92,23 @@ EOF
 `;
 
 
+const tslint_json = `
+cat << EOF > tslint.json
+{
+	"defaultSeverity": "error",
+	"extends": [
+		"tslint:recommended"
+	],
+	"jsRules": {},
+	"rules": {
+		"no-console": false,
+		"max-classes-per-file": false
+	},
+	"rulesDirectory": []
+}
+EOF
+`;
+
 
 const gulpfile_js = `
 cat << EOF > gulpfile.js
@@ -197,6 +214,7 @@ EOF
 export function init() {
     console.log(dot_git_ignore);
     console.log(gulpfile_js);
+    console.log(tslint_json);
     console.log(install_tools);
 }
 
