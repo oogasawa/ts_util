@@ -19,7 +19,7 @@ node_modules/
 
 EOF
 `;
-const tsconfig_json = `
+const mocha_tsconfig_json = `
 cat <<EOF > tsconfig.json
 
 {
@@ -44,6 +44,39 @@ cat <<EOF > tsconfig.json
 		],
 		"types": [
 			"mocha",
+			"node"
+		]
+	},
+	"moduleResolution": "node"
+}
+
+EOF
+`;
+const jest_tsconfig_json = `
+cat <<EOF > tsconfig.json
+
+{
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"dist/**/*",
+		"node_modules",
+		"test/**/*"
+	],
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonJS",
+		"esModuleInterop": true,
+		"downlevelIteration": true,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"lib":[
+			"es2020.string"
+		],
+		"types": [
+			"jest",
 			"node"
 		]
 	},
@@ -101,7 +134,7 @@ const jest_config_js = `
 cat << EOF > jest.config.js
 module.exports = {
   "roots": [
-    "<rootDir>/src"
+    "<rootDir>/test"
   ],
   "testMatch": [
     "**/__tests__/**/*.+(ts|tsx|js)",
@@ -110,6 +143,7 @@ module.exports = {
   "transform": {
     "^.+\\.(ts|tsx)$": "ts-jest"
   },
+  verbose: true
 }
 EOF
 `;
@@ -123,6 +157,7 @@ cat << EOF
 Edit package.json as follows
 
     ...
+"bin": "./dist/YOURPACKAGE.js",
 "main": "./dist/lib/index.js",
 "types": "./src/lib/index.ts",
 "scripts": {
@@ -138,18 +173,19 @@ EOF
 `;
 function init() {
     console.log(dot_git_ignore);
-    console.log(tsconfig_json);
     console.log(gulpfile_js);
     console.log(install_tools);
 }
 exports.init = init;
 function init_with_mocha() {
     init();
+    console.log(mocha_tsconfig_json);
     console.log(install_mocha);
 }
 exports.init_with_mocha = init_with_mocha;
 function init_with_jest() {
     init();
+    console.log(jest_tsconfig_json);
     console.log(jest_config_js);
     console.log(install_jest);
 }
