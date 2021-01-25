@@ -1,4 +1,12 @@
 
+mkdir -p {{{baseDir}}}/{{{emptyProject}}}
+cd {{{baseDir}}}/{{{emptyProject}}}
+npm init -y
+npm install --save @types/node
+npm install --save {{{packageName}}}
+
+cat <<EOF > tsconfig.json
+
 {
 	"include": [
 		"src/**/*"
@@ -21,10 +29,11 @@
 			"es2020.string"
 		],
 		"types": [
-			"jest",
 			"node"
 		]
 	},
 	"moduleResolution": "node"
 }
+EOF
+
 

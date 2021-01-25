@@ -34,27 +34,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const yargs_1 = __importDefault(require("yargs"));
 const init = __importStar(require("./lib/init"));
-// import * as shelljs from "shelljs";
+const AtTypes_1 = require("./lib/AtTypes");
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const argv = yargs_1.default
-            .command("publish_typedoc", "Copy typedoc files to the dest directory", (yargs) => {
-            yargs
-                .option('src', {
+            .command("publish_typedoc", "Copy typedoc files to the dest directory", (obj) => {
+            obj.option('src', {
                 alias: 's',
                 describe: 'source directory',
                 default: './docs'
-            })
-                .option('dest', {
+            }).option('dest', {
                 alias: 'd',
                 describe: "destination directory",
-                default: "/mnt/c/Users/oogas/Documents/typedoc"
+                default: process.env["HOME"] + "/public_html/typedoc"
             });
         })
-            .command("init", "Initialize the package", (yargs) => {
-            yargs
-                .option('unit_test', {
+            .command("publish_@types", "Generate a TypeDoc from @types project", (obj) => {
+            obj.option('base-dir', {
+                alias: 'b',
+                describe: 'base directory',
+                default: process.env["HOME"] + '/tmp'
+            }).option('dest', {
+                alias: 'd',
+                describe: "destination directory",
+                default: process.env["HOME"] + "/public_html/typedoc/@types"
+            }).option('package', {
+                alias: 'p',
+                describe: "package name",
+                default: "@types/node"
+            });
+        })
+            .command("init", "Initialize the package", (y) => {
+            y.option('unit_test', {
                 alias: 'u',
                 describe: "Unit test framework",
                 default: 'jest'
@@ -67,6 +79,10 @@ function main() {
         // console.log(argv);
         if (argv._[0] === "publish_typedoc") {
             yield publish_typedoc(pkgName, argv.src, argv.dest);
+        }
+        if (argv._[0] === "publish_@types") {
+            const atTypes = new AtTypes_1.AtTypes();
+            atTypes.publish(argv.package, argv["base-dir"], argv.dest);
         }
         else if (argv._[0] === "init") {
             switch (argv.unit_test) {

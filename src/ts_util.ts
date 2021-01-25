@@ -1,9 +1,9 @@
 
-
 import * as fs from "fs";
 import yargs from "yargs";
 import * as init from "./lib/init";
-// import * as shelljs from "shelljs";
+import { AtTypes } from "./lib/AtTypes";
+import { publish_docsify_sidebars } from "./lib/Docsify";
 
 main();
 
@@ -12,29 +12,44 @@ async function main() {
 
     const argv = yargs
         .command("publish_typedoc", "Copy typedoc files to the dest directory",
-            (yargs) => {
-                yargs
-                    .option('src', {
-                        alias: 's',
-                        describe: 'source directory',
-                        default: './docs'
-                    })
-                    .option('dest', {
-                        alias: 'd',
-                        describe: "destination directory",
-                        default: "/mnt/c/Users/oogas/Documents/typedoc"
-                    })
+            (obj) => {
+                obj.option('src', {
+                    alias: 's',
+                    describe: 'source directory',
+                    default: './docs'
+                }).option('dest', {
+                    alias: 'd',
+                    describe: "destination directory",
+                    default: process.env["HOME"] + "/public_html/typedoc"
+                })
+
+            })
+        .command("publish_@types", "Generate a TypeDoc from @types project",
+            (obj) => {
+                obj.option('base-dir', {
+                    alias: 'b',
+                    describe: 'base directory',
+                    default: process.env["HOME"] + '/tmp'
+                }).option('dest', {
+                    alias: 'd',
+                    describe: "destination directory",
+                    default: process.env["HOME"] + "/public_html/typedoc/@types"
+                }).option('package', {
+                    alias: 'p',
+                    describe: "package name",
+                    default: "@types/node"
+                })
 
             })
         .command("init", "Initialize the package",
-            (yargs) => {
-                yargs
-                    .option('unit_test', {
-                        alias: 'u',
-                        describe: "Unit test framework",
-                        default: 'jest'
-                    })
+            (y) => {
+                y.option('unit_test', {
+                    alias: 'u',
+                    describe: "Unit test framework",
+                    default: 'jest'
+                })
             })
+        .command("publish_docsify_sidebars", "Generate docsify _sidebar.md from the orig file.")
         .demandCommand()
         .help()
         .argv;
@@ -44,7 +59,14 @@ async function main() {
     // console.log(argv);
 
     if (argv._[0] === "publish_typedoc") {
-        await publish_typedoc(pkgName, <string>argv.src, <string>argv.dest);
+        await publish_typedoc(pkgName, argv.src as string, argv.dest as string);
+    }
+    else if (argv._[0] === "publish_@types") {
+        const atTypes = new AtTypes();
+        atTypes.publish(argv.package as string, argv["base-dir"] as string, argv.dest as string);
+    }
+    else if (argv._[0] === "publish_docsify_sidebars") {
+        publish_docsify_sidebars();
     }
     else if (argv._[0] === "init") {
         switch (<string>argv.unit_test) {
