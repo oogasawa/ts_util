@@ -34,13 +34,38 @@ class AtTypes {
         this.rng = new mersenne_twister_1.default();
         const d = new Date();
         this.emptyProject = sprintf_js_1.sprintf("empty_project%04d%02d%02d_%02d%02d%02d_%05d", d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), this.rng.random_int() % 100000);
-        this.isCalledFromPackage();
-        this.packageCreationTemplate = "/snapshot/ts_util/data/publish_@types_create_project.sh";
-        this.typedocCompilationTemplate = "/snapshot/ts_util/data/publish_@types_compile_typedoc.sh";
+        if (this.isPkg()) {
+            this.packageCreationTemplate = "/snapshot/ts_util/data/publish_@types_create_project.sh";
+            this.typedocCompilationTemplate = "/snapshot/ts_util/data/publish_@types_compile_typedoc.sh";
+        }
+        else {
+            this.packageCreationTemplate = "data/publish_@types_create_project.sh";
+            this.typedocCompilationTemplate = "data/publish_@types_compile_typedoc.sh";
+        }
     }
-    isCalledFromPackage() {
-        console.log(process.argv);
-        return true;
+    /** Checks if this module is called from a binary package created by pkg or not.
+     *
+     *  If this module is called from a pkg-ed binary, `process.argv` will be as follows:
+     *
+     *  ```
+     *  $ ts_util publish_@types -p comedy
+     *  [
+     *     '/home/oogasawa/local/bin/ts_util',
+     *     '/snapshot/ts_util/dist/ts_util.js',
+     *     'publish_@types',
+     *     '-p',
+     *     'comedy'
+     *   ]
+     * ```
+     */
+    isPkg() {
+        // console.log(process.argv);
+        if (process.argv.length >= 2 && process.argv[1] === "/snapshot/ts_util/dist/ts_util.js") {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     /** Publish a specified @types/package typedoc.
      *
@@ -66,6 +91,7 @@ class AtTypes {
         object_path_1.default.set(params, "packageName", packageName);
         const templateStr = fs.readFileSync(this.packageCreationTemplate);
         const initCommands = mustache_1.default.render(templateStr.toString(), params);
+        fs.writeFileSync("", initCommands); // 
         console.log(initCommands);
     }
     compileTypedoc(baseDir) {
@@ -77,10 +103,14 @@ class AtTypes {
     }
     determineMode(baseDir) {
         const emptyProjectDir = baseDir + "/" + this.emptyProject;
+        console.log(emptyProjectDir);
         let defCounter = 0;
         // let tsCounter = 0;
         child_process
-            .execSync("find ./ -name '*.ts'", { cwd: emptyProjectDir })
+            .execSync("find ./ -name '*.ts'", {
+            cwd: emptyProjectDir,
+            shell: "/bin/bash"
+        })
             .toString()
             .split("\n")
             .forEach((line) => {

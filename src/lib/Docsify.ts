@@ -36,8 +36,12 @@ export function publish_docsify_sidebars() {
     const origData: Section[] = parse_orig_file();
     let section: Section;
 
+    console.log(origData);
+
     // for main _sidebar.md
-    fs.writeFileSync("_sidebar.md", get_sidebar(origData), { encoding: "utf-8" });
+    const mainSidebar: string = get_sidebar(origData);
+    console.log(mainSidebar);
+    fs.writeFileSync("_sidebar.md", mainSidebar, { encoding: "utf-8" });
 
 
     // for subdirectories.
@@ -60,8 +64,8 @@ function get_sidebar(origData: Section[]): string {
 
 
     for (let s of origData) {
-        result.concat("");
-        result.concat(s.getLevel1());
+        result.push("");
+        result = result.concat(s.getLevel1());
     }
 
     return result.join("\n");
@@ -78,11 +82,11 @@ function get_section_sidebar(origData: Section[], section: Section): string {
 
     for (let s of origData) {
         if (s.sectionName === section.sectionName) {
-            result.concat(s.getLevel2());
+            result = result.concat(s.getLevel2());
         }
         else {
-            result.concat("");
-            result.concat(s.getLevel1());
+            result.push("");
+            result = result.concat(s.getLevel1());
         }
     }
 

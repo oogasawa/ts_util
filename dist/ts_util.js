@@ -35,6 +35,7 @@ const fs = __importStar(require("fs"));
 const yargs_1 = __importDefault(require("yargs"));
 const init = __importStar(require("./lib/init"));
 const AtTypes_1 = require("./lib/AtTypes");
+const Docsify_1 = require("./lib/Docsify");
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -72,17 +73,21 @@ function main() {
                 default: 'jest'
             });
         })
+            .command("publish_docsify_sidebars", "Generate docsify _sidebar.md from the orig file.")
             .demandCommand()
             .help()
             .argv;
-        const pkgName = get_package_name();
         // console.log(argv);
         if (argv._[0] === "publish_typedoc") {
+            const pkgName = get_package_name();
             yield publish_typedoc(pkgName, argv.src, argv.dest);
         }
-        if (argv._[0] === "publish_@types") {
+        else if (argv._[0] === "publish_@types") {
             const atTypes = new AtTypes_1.AtTypes();
             atTypes.publish(argv.package, argv["base-dir"], argv.dest);
+        }
+        else if (argv._[0] === "publish_docsify_sidebars") {
+            Docsify_1.publish_docsify_sidebars();
         }
         else if (argv._[0] === "init") {
             switch (argv.unit_test) {

@@ -55,10 +55,11 @@ async function main() {
         .argv;
 
 
-    const pkgName = get_package_name();
+
     // console.log(argv);
 
     if (argv._[0] === "publish_typedoc") {
+        const pkgName = get_package_name();
         await publish_typedoc(pkgName, argv.src as string, argv.dest as string);
     }
     else if (argv._[0] === "publish_@types") {
