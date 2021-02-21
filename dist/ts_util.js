@@ -73,7 +73,7 @@ function main() {
                 default: 'jest'
             });
         })
-            .command("publish_docsify_sidebars", "Generate docsify _sidebar.md from the orig file.")
+            .command("publish_sidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
             .demandCommand()
             .help()
             .argv;
@@ -86,8 +86,8 @@ function main() {
             const atTypes = new AtTypes_1.AtTypes();
             atTypes.publish(argv.package, argv["base-dir"], argv.dest);
         }
-        else if (argv._[0] === "publish_docsify_sidebars") {
-            Docsify_1.publish_docsify_sidebars();
+        else if (argv._[0] === "publish_sidebars") {
+            Docsify_1.publish_sidebars();
         }
         else if (argv._[0] === "init") {
             switch (argv.unit_test) {

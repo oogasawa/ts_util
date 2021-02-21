@@ -3,7 +3,7 @@ import * as fs from "fs";
 import yargs from "yargs";
 import * as init from "./lib/init";
 import { AtTypes } from "./lib/AtTypes";
-import { publish_docsify_sidebars } from "./lib/Docsify";
+import SidebarOrigFile from "./lib/docsify/SidebarOrigFile";
 
 main();
 
@@ -49,7 +49,7 @@ async function main() {
                     default: 'jest'
                 })
             })
-        .command("publish_docsify_sidebars", "Generate docsify _sidebar.md from the orig file.")
+        .command("publish_sidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
         .demandCommand()
         .help()
         .argv;
@@ -66,11 +66,13 @@ async function main() {
         const atTypes = new AtTypes();
         atTypes.publish(argv.package as string, argv["base-dir"] as string, argv.dest as string);
     }
-    else if (argv._[0] === "publish_docsify_sidebars") {
-        publish_docsify_sidebars();
+    else if (argv._[0] === "publish_sidebars") {
+        const orig = new SidebarOrigFile();
+        orig.parseOrigFile();
+        orig.publishSidebars();
     }
     else if (argv._[0] === "init") {
-        switch (<string>argv.unit_test) {
+        switch (argv.unit_test as string) {
             case "jest":
                 init.init_with_jest();
                 break;
