@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Section {
-    // constructor() { }
+    constructor() {
+        this.level2 = [];
+    }
     getLevel1() {
         return [this.level1];
     }

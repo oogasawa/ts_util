@@ -5,7 +5,9 @@ export default class Section {
     level1: string;
     level2: string[];
 
-    // constructor() { }
+    constructor() {
+        this.level2 = [];
+    }
 
     getLevel1(): string[] {
         return [this.level1];

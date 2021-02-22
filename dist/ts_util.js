@@ -35,7 +35,7 @@ const fs = __importStar(require("fs"));
 const yargs_1 = __importDefault(require("yargs"));
 const init = __importStar(require("./lib/init"));
 const AtTypes_1 = require("./lib/AtTypes");
-const Docsify_1 = require("./lib/Docsify");
+const SidebarOrigFile_1 = __importDefault(require("./lib/docsify/SidebarOrigFile"));
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -87,7 +87,9 @@ function main() {
             atTypes.publish(argv.package, argv["base-dir"], argv.dest);
         }
         else if (argv._[0] === "publish_sidebars") {
-            Docsify_1.publish_sidebars();
+            const orig = new SidebarOrigFile_1.default();
+            orig.parseOrigFile();
+            orig.publishSidebars();
         }
         else if (argv._[0] === "init") {
             switch (argv.unit_test) {

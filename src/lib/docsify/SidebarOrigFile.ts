@@ -1,5 +1,4 @@
 
-
 import * as fs from "fs";
 import Section from "./Section";
 import lineByLine from "n-readlines";
@@ -43,7 +42,7 @@ export default class SidebarOrigFile {
     }
 
 
-    generateMainSidebar(): string {
+    generateMainSidebar(): string[] {
         let result: string[] = [];
 
         result.push("<!-- docs/_sidebar.md -->");
@@ -56,12 +55,13 @@ export default class SidebarOrigFile {
             result = result.concat(s.getLevel1());
         }
 
-        return result.join("\n");
+        // return result.join("\n");
+        return result;
     }
 
 
 
-    generateSectionSidebar(section: Section): string {
+    generateSectionSidebar(section: Section): string[] {
 
         let result: string[] = [];
 
@@ -79,12 +79,12 @@ export default class SidebarOrigFile {
                 result = result.concat(s.getLevel1());
             }
         }
-
-        return result.join("\n");
+        // console.log("# generateSectionSidebar");
+        // console.log(result);
+        // console.log("# --- generateSectionSidebar");
+        // return result.join("\n");
+        return result;
     }
-
-
-
 
 
 
@@ -100,6 +100,7 @@ export default class SidebarOrigFile {
         let line: false | Buffer;
         while (true) {
             line = liner.next();
+            // console.log("line: " + line.toString());
             if (line === false) { break }
 
             let m = pLevel1.exec(line.toString());
@@ -130,20 +131,17 @@ export default class SidebarOrigFile {
 
     publishSidebars() {
 
-        this.parseOrigFile();
-        let section: Section;
-
-        console.log(this.sections);
-
         // Generates main _sidebar.md
-        const mainSidebar: string = this.generateMainSidebar();
-        console.log(mainSidebar);
+        const mainSidebar: string = this.generateMainSidebar().join("\n");
+        console.log(this.sections);
+        // console.log(mainSidebar);
         fs.writeFileSync("_sidebar.md", mainSidebar, { encoding: "utf-8" });
 
 
         // Generates _sidebar.md files in subdirectories.
+        let section: Section;
         for (section of this.sections) {
-            const sectionStr: string = this.generateSectionSidebar(section);
+            const sectionStr: string = this.generateSectionSidebar(section).join("\n");
             const outfile: string = section.sectionName + "/_sidebar.md";
             fs.writeFileSync(outfile, sectionStr, { encoding: "utf-8" });
         }

@@ -28,8 +28,27 @@ describe('SidebarOrig class', () => {
             console.log(orig.sections);
 
             expect(orig.sections.length).toEqual(3);
+        });
 
-            // expect(orig).toBeTruthy();
+    });
+
+
+    describe("Generating sidebars", () => {
+
+        let orig: SidebarOrigFile;
+
+        beforeEach(() => {
+            orig = new SidebarOrigFile();
+            orig.origFilePath = "./test/lib/docsify/_sidebar.orig.md";
+            orig.parseOrigFile();
+        });
+
+
+        test("generateMainSidebar", () => {
+            expect(orig.sections.length).toEqual(3);
+
+            const mainSidebar: string = orig.generateMainSidebar();
+            console.log(mainSidebar);
         });
 
     });
