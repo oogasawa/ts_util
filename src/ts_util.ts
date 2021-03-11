@@ -12,7 +12,7 @@ main();
 async function main() {
 
     const argv = yargs
-        .command("publish_typedoc", "Copy typedoc files to the dest directory",
+        .command("typedoc_publish", "Copy typedoc files to the dest directory",
             (obj) => {
                 obj.option('src', {
                     alias: 's',
@@ -25,7 +25,7 @@ async function main() {
                 })
 
             })
-        .command("publish_@types", "Generate a TypeDoc from @types project",
+        .command("typedoc_buildFrom@types", "Build a TypeDoc from a @types project",
             (obj) => {
                 obj.option('base-dir', {
                     alias: 'b',
@@ -50,8 +50,8 @@ async function main() {
                     default: 'jest'
                 })
             })
-        .command("init_docsify", "Initialize a docsify directory.")
-        .command("publish_sidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
+        .command("docsify_init", "Initialize a docsify directory.")
+        .command("docsify_generateSidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
         .demandCommand()
         .help()
         .argv;
@@ -64,7 +64,7 @@ async function main() {
         const pkgName = get_package_name();
         await typedoc_publish(pkgName, argv.src as string, argv.dest as string);
     }
-    else if (argv._[0] === "typedoc_build@types") {
+    else if (argv._[0] === "typedoc_buildFrom@types") {
         const atTypes = new AtTypes();
         atTypes.publish(argv.package as string, argv["base-dir"] as string, argv.dest as string);
     }

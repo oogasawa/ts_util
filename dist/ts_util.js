@@ -41,7 +41,7 @@ main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const argv = yargs_1.default
-            .command("publish_typedoc", "Copy typedoc files to the dest directory", (obj) => {
+            .command("typedoc_publish", "Copy typedoc files to the dest directory", (obj) => {
             obj.option('src', {
                 alias: 's',
                 describe: 'source directory',
@@ -52,7 +52,7 @@ function main() {
                 default: process.env.HOME + "/public_html/typedoc"
             });
         })
-            .command("publish_@types", "Generate a TypeDoc from @types project", (obj) => {
+            .command("typedoc_buildFrom@types", "Build a TypeDoc from a @types project", (obj) => {
             obj.option('base-dir', {
                 alias: 'b',
                 describe: 'base directory',
@@ -74,8 +74,8 @@ function main() {
                 default: 'jest'
             });
         })
-            .command("init_docsify", "Initialize a docsify directory.")
-            .command("publish_sidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
+            .command("docsify_init", "Initialize a docsify directory.")
+            .command("docsify_generateSidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
             .demandCommand()
             .help()
             .argv;
@@ -84,7 +84,7 @@ function main() {
             const pkgName = get_package_name();
             yield typedoc_publish(pkgName, argv.src, argv.dest);
         }
-        else if (argv._[0] === "typedoc_build@types") {
+        else if (argv._[0] === "typedoc_buildFrom@types") {
             const atTypes = new AtTypes_1.AtTypes();
             atTypes.publish(argv.package, argv["base-dir"], argv.dest);
         }
