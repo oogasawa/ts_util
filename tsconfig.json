@@ -13,8 +13,8 @@
 		"module": "commonJS",
 		"esModuleInterop": true,
 		"downlevelIteration": true,
+		"noImplicitAny": true,
 		"removeComments": false,
-		"preserveConstEnums": true,
 		"sourceMap": true,
 		"lib":[
 			"esnext",

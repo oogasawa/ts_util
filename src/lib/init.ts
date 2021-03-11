@@ -1,6 +1,6 @@
 
 
-const dot_git_ignore = `
+const dotGitIgnore = `
 
 cat <<EOF > .gitignore
 
@@ -21,7 +21,7 @@ EOF
 
 
 
-const mocha_tsconfig_json = `
+const mochaTsconfigJson = `
 cat <<EOF > tsconfig.json
 
 {
@@ -38,8 +38,8 @@ cat <<EOF > tsconfig.json
 		"module": "commonJS",
 		"esModuleInterop": true,
 		"downlevelIteration": true,
-		"removeComments": false,
-		"preserveConstEnums": true,
+        "noImplicitAny": true,
+		"removeComments": true,
 		"sourceMap": true,
 		"lib":[
 			"es2020.string"
@@ -57,7 +57,7 @@ EOF
 
 
 
-const jest_tsconfig_json = `
+const jestTsconfigJson = `
 cat <<EOF > tsconfig.json
 
 {
@@ -74,8 +74,8 @@ cat <<EOF > tsconfig.json
 		"module": "commonJS",
 		"esModuleInterop": true,
 		"downlevelIteration": true,
-		"removeComments": false,
-		"preserveConstEnums": true,
+        "noImplicitAny": true,
+		"removeComments": true,
 		"sourceMap": true,
 		"lib":[
 			"es2020.string"
@@ -92,7 +92,7 @@ EOF
 `;
 
 
-const tslint_json = `
+const tslintJson = `
 cat << EOF > tslint.json
 {
 	"defaultSeverity": "error",
@@ -110,7 +110,7 @@ EOF
 `;
 
 
-const gulpfile_js = `
+const gulpfileJs = `
 cat << EOF > gulpfile.js
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
@@ -126,7 +126,7 @@ gulp.task('default', function() {
 EOF
 `;
 
-const install_tools = `
+const installTools = `
 
 npm install --save @types/node
 npm install --save-dev typescript @types/typescript ts-node
@@ -134,7 +134,7 @@ npm install --save-dev gulp gulp-cli gulp-typescript
 npm install --save log4js
 `;
 
-const install_mocha = `
+const installMocha = `
 
 mkdir -p src/lib test/lib
 
@@ -163,7 +163,7 @@ EOF
 
 
 
-const jest_config_js = `
+const jestConfigJs = `
 cat << EOF > jest.config.js
 module.exports = {
   "roots": [
@@ -182,7 +182,7 @@ EOF
 `
 
 
-const install_jest = `
+const installJest = `
 
 mkdir -p src/lib test/lib
 
@@ -212,26 +212,26 @@ EOF
 
 
 export function init() {
-    console.log(dot_git_ignore);
-    console.log(gulpfile_js);
-    console.log(tslint_json);
-    console.log(install_tools);
+    console.log(dotGitIgnore);
+    console.log(gulpfileJs);
+    console.log(tslintJson);
+    console.log(installTools);
 }
 
 
 
 export function init_with_mocha() {
     init();
-    console.log(mocha_tsconfig_json);
-    console.log(install_mocha);
+    console.log(mochaTsconfigJson);
+    console.log(installMocha);
 }
 
 
 export function init_with_jest() {
     init();
-    console.log(jest_tsconfig_json);
-    console.log(jest_config_js);
-    console.log(install_jest);
+    console.log(jestTsconfigJson);
+    console.log(jestConfigJs);
+    console.log(installJest);
 }
 
 

@@ -29,18 +29,22 @@ const mersenne_twister_1 = __importDefault(require("mersenne-twister"));
 const sprintf_js_1 = require("sprintf-js");
 const mustache_1 = __importDefault(require("mustache"));
 const object_path_1 = __importDefault(require("object-path"));
+/** `@types` related procedures.
+ *
+ *
+ */
 class AtTypes {
     constructor() {
         this.rng = new mersenne_twister_1.default();
         const d = new Date();
         this.emptyProject = sprintf_js_1.sprintf("empty_project%04d%02d%02d_%02d%02d%02d_%05d", d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), this.rng.random_int() % 100000);
         if (this.isPkg()) {
-            this.packageCreationTemplate = "/snapshot/ts_util/data/publish_@types_create_project.sh";
-            this.typedocCompilationTemplate = "/snapshot/ts_util/data/publish_@types_compile_typedoc.sh";
+            this.packageCreationShellScriptTemplate = "/snapshot/ts_util/data/publish_@types_create_project.sh";
+            this.typedocCompilationShellScriptTemplate = "/snapshot/ts_util/data/publish_@types_compile_typedoc.sh";
         }
         else {
-            this.packageCreationTemplate = "data/publish_@types_create_project.sh";
-            this.typedocCompilationTemplate = "data/publish_@types_compile_typedoc.sh";
+            this.packageCreationShellScriptTemplate = "data/publish_@types_create_project.sh";
+            this.typedocCompilationShellScriptTemplate = "data/publish_@types_compile_typedoc.sh";
         }
     }
     /** Checks if this module is called from a binary package created by pkg or not.
@@ -69,15 +73,15 @@ class AtTypes {
     }
     /** Publish a specified @types/package typedoc.
      *
-     * This method creates an empty project,
-     * installs the given @types/package from the npm repository into the empty project,
-     * compile the package with typedoc,
-     * then publish the result HTML pages to the specified directory.
-    *
-    * @param packageName
-    * @param baseDir
-    * @param destDir
-    */
+     * 1. Creates an empty project,
+     * 2. Installs the given @types/package from the npm repository into the empty project
+     * 3. compiles the downloaded @types/package with typedoc
+     * 4. publishes the result HTML pages to the specified directory.
+     *
+     * @param packageName
+     * @param baseDir
+     * @param destDir
+     */
     publish(packageName, baseDir, destDir) {
         this.createEmptyProject(baseDir, packageName);
         this.compileTypedoc(baseDir);
@@ -89,7 +93,7 @@ class AtTypes {
         object_path_1.default.set(params, "baseDir", baseDir);
         object_path_1.default.set(params, "emptyProject", this.emptyProject);
         object_path_1.default.set(params, "packageName", packageName);
-        const templateStr = fs.readFileSync(this.packageCreationTemplate);
+        const templateStr = fs.readFileSync(this.packageCreationShellScriptTemplate);
         const initCommands = mustache_1.default.render(templateStr.toString(), params);
         fs.writeFileSync("", initCommands); // 
         console.log(initCommands);
@@ -97,7 +101,7 @@ class AtTypes {
     compileTypedoc(baseDir) {
         let params = {};
         object_path_1.default.set(params, "mode", this.determineMode(baseDir));
-        const templateStr = fs.readFileSync(this.packageCreationTemplate);
+        const templateStr = fs.readFileSync(this.packageCreationShellScriptTemplate);
         const initCommands = mustache_1.default.render(templateStr.toString(), params);
         console.log(initCommands);
     }

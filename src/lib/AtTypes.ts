@@ -1,3 +1,4 @@
+
 import * as fs from "fs";
 import * as child_process from "child_process";
 import { Readable, Transform } from "stream";
@@ -7,15 +8,19 @@ import Mustache from "mustache";
 import objectPath from "object-path";
 
 
+/** `@types` related procedures.
+ *
+ *
+ */
 export class AtTypes {
 
     rng: MersenneTwister;
 
     emptyProject: string;
 
-    packageCreationTemplate: string;
+    packageCreationShellScriptTemplate: string;
 
-    typedocCompilationTemplate: string;
+    typedocCompilationShellScriptTemplate: string;
 
     constructor() {
         this.rng = new MersenneTwister();
@@ -26,12 +31,12 @@ export class AtTypes {
             this.rng.random_int() % 100000);
 
         if (this.isPkg()) {
-            this.packageCreationTemplate = "/snapshot/ts_util/data/publish_@types_create_project.sh";
-            this.typedocCompilationTemplate = "/snapshot/ts_util/data/publish_@types_compile_typedoc.sh";
+            this.packageCreationShellScriptTemplate = "/snapshot/ts_util/data/publish_@types_create_project.sh";
+            this.typedocCompilationShellScriptTemplate = "/snapshot/ts_util/data/publish_@types_compile_typedoc.sh";
         }
         else {
-            this.packageCreationTemplate = "data/publish_@types_create_project.sh";
-            this.typedocCompilationTemplate = "data/publish_@types_compile_typedoc.sh";
+            this.packageCreationShellScriptTemplate = "data/publish_@types_create_project.sh";
+            this.typedocCompilationShellScriptTemplate = "data/publish_@types_compile_typedoc.sh";
 
         }
     }
@@ -40,7 +45,7 @@ export class AtTypes {
     /** Checks if this module is called from a binary package created by pkg or not.
      *
      *  If this module is called from a pkg-ed binary, `process.argv` will be as follows:
-     *  
+     *
      *  ```
      *  $ ts_util publish_@types -p comedy
      *  [
@@ -65,16 +70,16 @@ export class AtTypes {
 
 
     /** Publish a specified @types/package typedoc.
-     * 
-     * This method creates an empty project, 
-     * installs the given @types/package from the npm repository into the empty project, 
-     * compile the package with typedoc, 
-     * then publish the result HTML pages to the specified directory.
-    * 
-    * @param packageName 
-    * @param baseDir 
-    * @param destDir 
-    */
+     *
+     * 1. Creates an empty project,
+     * 2. Installs the given @types/package from the npm repository into the empty project
+     * 3. compiles the downloaded @types/package with typedoc
+     * 4. publishes the result HTML pages to the specified directory.
+     *
+     * @param packageName 
+     * @param baseDir 
+     * @param destDir 
+     */
     publish(packageName: string, baseDir: string, destDir: string) {
         this.createEmptyProject(baseDir, packageName);
         this.compileTypedoc(baseDir);
@@ -91,7 +96,7 @@ export class AtTypes {
         objectPath.set(params, "emptyProject", this.emptyProject);
         objectPath.set(params, "packageName", packageName);
 
-        const templateStr: Buffer = fs.readFileSync(this.packageCreationTemplate);
+        const templateStr: Buffer = fs.readFileSync(this.packageCreationShellScriptTemplate);
         const initCommands: string = Mustache.render(templateStr.toString(), params);
         fs.writeFileSync("", initCommands); // 
         console.log(initCommands);
@@ -103,7 +108,7 @@ export class AtTypes {
         let params = {};
         objectPath.set(params, "mode", this.determineMode(baseDir));
 
-        const templateStr: Buffer = fs.readFileSync(this.packageCreationTemplate);
+        const templateStr: Buffer = fs.readFileSync(this.packageCreationShellScriptTemplate);
         const initCommands: string = Mustache.render(templateStr.toString(), params);
         console.log(initCommands);
 
