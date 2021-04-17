@@ -50,8 +50,6 @@ async function main() {
                     default: 'jest'
                 })
             })
-        .command("docsify_init", "Initialize a docsify directory.")
-        .command("docsify_generateSidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
         .demandCommand()
         .help()
         .argv;
@@ -68,14 +66,6 @@ async function main() {
         const atTypes = new AtTypes();
         atTypes.publish(argv.package as string, argv["base-dir"] as string, argv.dest as string);
     }
-    else if (argv._[0] === "docsify_generateSidebars") {
-        const orig = new SidebarOrigFile();
-        orig.parseOrigFile();
-        orig.publishSidebars();
-    }
-    // else if (argv._[0] === "docsify_init") {
-
-    // }
     else if (argv._[0] === "init") {
         switch (argv.unit_test as string) {
             case "jest":

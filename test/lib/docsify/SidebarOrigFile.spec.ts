@@ -47,7 +47,7 @@ describe('SidebarOrig class', () => {
         test("generateMainSidebar", () => {
             expect(orig.sections.length).toEqual(3);
 
-            const mainSidebar: string = orig.generateMainSidebar();
+            const mainSidebar: string[] = orig.generateMainSidebar();
             console.log(mainSidebar);
         });
 
