@@ -3,8 +3,7 @@ import * as fs from "fs";
 import yargs from "yargs";
 import * as init from "./lib/init";
 import { AtTypes } from "./lib/AtTypes";
-import SidebarOrigFile from "./lib/docsify/SidebarOrigFile";
-// import * as docsify from "./lib/docsify/init";
+
 
 main();
 
