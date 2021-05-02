@@ -34,9 +34,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const yargs_1 = __importDefault(require("yargs"));
 const init = __importStar(require("./lib/init"));
+const initDeno_1 = require("./lib/initDeno");
 const AtTypes_1 = require("./lib/AtTypes");
-const SidebarOrigFile_1 = __importDefault(require("./lib/docsify/SidebarOrigFile"));
-// import * as docsify from "./lib/docsify/init";
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -74,8 +73,7 @@ function main() {
                 default: 'jest'
             });
         })
-            .command("docsify_init", "Initialize a docsify directory.")
-            .command("docsify_generateSidebars", "Generate docsify _sidebar.md from a _sidebar.orig.md file.")
+            .command("initDeno", "Initialize a Deno module directory")
             .demandCommand()
             .help()
             .argv;
@@ -88,13 +86,9 @@ function main() {
             const atTypes = new AtTypes_1.AtTypes();
             atTypes.publish(argv.package, argv["base-dir"], argv.dest);
         }
-        else if (argv._[0] === "docsify_generateSidebars") {
-            const orig = new SidebarOrigFile_1.default();
-            orig.parseOrigFile();
-            orig.publishSidebars();
+        else if (argv._[0] === "initDeno") {
+            initDeno_1.initDeno();
         }
-        // else if (argv._[0] === "docsify_init") {
-        // }
         else if (argv._[0] === "init") {
             switch (argv.unit_test) {
                 case "jest":

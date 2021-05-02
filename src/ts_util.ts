@@ -2,9 +2,9 @@
 import * as fs from "fs";
 import yargs from "yargs";
 import * as init from "./lib/init";
+import { initDeno } from "./lib/initDeno";
 import { AtTypes } from "./lib/AtTypes";
-import SidebarOrigFile from "./lib/docsify/SidebarOrigFile";
-// import * as docsify from "./lib/docsify/init";
+
 
 main();
 
@@ -50,6 +50,7 @@ async function main() {
                     default: 'jest'
                 })
             })
+        .command("initDeno", "Initialize a Deno module directory")
         .demandCommand()
         .help()
         .argv;
@@ -65,6 +66,9 @@ async function main() {
     else if (argv._[0] === "typedoc_buildFrom@types") {
         const atTypes = new AtTypes();
         atTypes.publish(argv.package as string, argv["base-dir"] as string, argv.dest as string);
+    }
+    else if (argv._[0] === "initDeno") {
+        initDeno();
     }
     else if (argv._[0] === "init") {
         switch (argv.unit_test as string) {
