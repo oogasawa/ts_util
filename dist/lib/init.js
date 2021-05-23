@@ -101,6 +101,22 @@ cat << EOF > tslint.json
 }
 EOF
 `;
+const dot_eslintrc = `
+cat << EOF > .eslintrc
+{
+"root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+"@typescript-eslint"
+],
+  "extends": [
+"eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+]
+
+}
+`;
 const gulpfileJs = `
 cat << EOF > gulpfile.js
 var gulp = require('gulp');
@@ -191,6 +207,7 @@ function init() {
     console.log(dotGitIgnore);
     console.log(gulpfileJs);
     console.log(tslintJson);
+    console.log(dot_eslintrc);
     console.log(installTools);
 }
 exports.init = init;
