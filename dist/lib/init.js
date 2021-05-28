@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init_with_jest = exports.init_with_mocha = exports.init = void 0;
+const npm_init = `
+npm init -y
+`;
 const dotGitIgnore = `
 
 cat <<EOF > .gitignore
@@ -116,6 +119,7 @@ cat << EOF > .eslintrc
 ]
 
 }
+EOF
 `;
 const gulpfileJs = `
 cat << EOF > gulpfile.js
@@ -204,6 +208,7 @@ EOF
 
 `;
 function init() {
+    console.log(npm_init);
     console.log(dotGitIgnore);
     console.log(gulpfileJs);
     console.log(tslintJson);

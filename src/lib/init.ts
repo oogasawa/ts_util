@@ -1,4 +1,8 @@
 
+const npm_init = `
+npm init -y
+`;
+
 
 const dotGitIgnore = `
 
@@ -125,6 +129,7 @@ cat << EOF > .eslintrc
 ]
 
 }
+EOF
 `;
 
 
@@ -231,6 +236,7 @@ EOF
 
 
 export function init() {
+    console.log(npm_init);
     console.log(dotGitIgnore);
     console.log(gulpfileJs);
     console.log(tslintJson);
